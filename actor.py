@@ -18,7 +18,8 @@ class ActorNetwork(nn.Module):
     def forward(self, state):
         x = self.backbone(state)
         mean = self.mean_layer(x)
-        std = torch.exp(self.log_std)
+        log_std = torch.clamp(self.log_std, min=-20, max=2)
+        std = torch.exp(log_std)
         dist = Normal(mean, std)
         return dist
 
