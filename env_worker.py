@@ -1,5 +1,5 @@
 import os
-if os.name == 'nt':
+if os.name == 'nt': #Check if windows
     os.add_dll_directory(r'C:\Program Files\SuperTuxKart 1.5')
 import pystk2
 import numpy as np
