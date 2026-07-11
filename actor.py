@@ -13,11 +13,21 @@ class ActorNetwork(nn.Module):
         )
         
         self.mean_layer = nn.Linear(hidden_dim, action_dim)
+        
+        # Initialize bias for acceleration to be positive (approx +1.0 after sigmoid is ~0.73)
+        nn.init.constant_(self.mean_layer.bias[1], 1.0)
+        
         self.log_std = nn.Parameter(torch.zeros(1, action_dim))
         
     def forward(self, state):
         x = self.backbone(state)
-        mean = self.mean_layer(x)
+        mean_raw = self.mean_layer(x)
+        
+        # Split and activate: Steering [-1, 1], Acceleration [0, 1]
+        steer = torch.tanh(mean_raw[:, 0:1])
+        accel = torch.sigmoid(mean_raw[:, 1:2])
+        mean = torch.cat([steer, accel], dim=1)
+        
         log_std = torch.clamp(self.log_std, min=-20, max=2)
         std = torch.exp(log_std)
         dist = Normal(mean, std)
