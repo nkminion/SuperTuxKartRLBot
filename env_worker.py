@@ -1,3 +1,15 @@
+'''
+Explanation for state_dim=60:
+Location = 3
+Velocity = 3
+Front = 3
+Jumping = 1
+Rotation = 4
+Distance = 1
+Total = 15
+Frame Stacking (x4) = 60
+'''
+
 import os
 if os.name == 'nt': #Check if windows
     os.add_dll_directory(r'C:\Program Files\SuperTuxKart 1.5')
@@ -84,6 +96,7 @@ def SingleInstance(rank,pipe):
 			action = pystk2.Action()
 			action.steer = ActionMessage[0]
 			action.acceleration = ActionMessage[1]
+			action.brake = True if ActionMessage[2] > 0.5 else False
 
 			# Step the environment
 			RaceEnded = not race.step(action)
@@ -111,7 +124,7 @@ def SingleInstance(rank,pipe):
 			reward = delta_dist * 100.0
 			
 			if speed < 1.0:
-				reward -= 0.5
+				reward -= 5.0
 				
 			if current_dist < 0:
 				reward -= 10.0

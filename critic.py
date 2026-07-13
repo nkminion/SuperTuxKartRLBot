@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class CriticNetwork(nn.Module):
-    def __init__(self, state_dim=60, hidden_dim=64):
+    def __init__(self, state_dim=60, hidden_dim=256):
         super(CriticNetwork, self).__init__()
         self.backbone = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
