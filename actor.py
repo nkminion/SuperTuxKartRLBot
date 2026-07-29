@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.distributions import Normal
 
 class ActorNetwork(nn.Module):
-    def __init__(self, state_dim=44, action_dim=3, hidden_dim=256):
+    def __init__(self, state_dim=52, action_dim=3, hidden_dim=256):
         super(ActorNetwork, self).__init__()
         self.backbone = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
@@ -25,7 +25,7 @@ class ActorNetwork(nn.Module):
         # Initialise bias for braking to be false (sigmoid(-2.0) ~ 0.11)
         nn.init.constant_(self.mean_layer.bias[2], -2.0)
         
-        self.log_std = nn.Parameter(torch.zeros(1, action_dim))
+        self.log_std = nn.Parameter(torch.full((1, action_dim), -2.0))
         
     def forward(self, state):
         x = self.backbone(state)
@@ -43,8 +43,8 @@ class ActorNetwork(nn.Module):
         return dist
 
 if __name__ == "__main__":
-    actor = ActorNetwork(state_dim=44, action_dim=3)
-    dummy_state = torch.randn(1, 44)
+    actor = ActorNetwork(state_dim=52, action_dim=3)
+    dummy_state = torch.randn(1, 52)
     action_dist = actor(dummy_state)
     action = action_dist.sample()
     print(f"State shape: {dummy_state.shape}")
