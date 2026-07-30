@@ -6,9 +6,11 @@ class CriticNetwork(nn.Module):
         super(CriticNetwork, self).__init__()
         self.backbone = nn.Sequential(
             nn.Linear(state_dim, hidden_dim),
-            nn.Tanh(),
+            nn.ELU(),
             nn.Linear(hidden_dim, hidden_dim),
-            nn.Tanh()
+            nn.ELU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ELU(),
         )
         
         self.value_layer = nn.Linear(hidden_dim, 1)
