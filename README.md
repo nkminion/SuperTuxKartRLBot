@@ -45,7 +45,7 @@ The environment observations are stacked across 4 frames to provide temporal con
 ### Prerequisites
 * Python 3.10+
 * [SuperTuxKart 1.5](https://supertuxkart.net/Download) installed on your system.
-* PyTorch (CPU or GPU)
+* PyTorch (CPU)
 
 ### Installation
 1. Clone this repository.
